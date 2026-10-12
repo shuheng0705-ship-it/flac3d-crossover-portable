@@ -1,0 +1,27 @@
+{
+  "source_crossover": "26.3",
+  "source_flac3d": "6.00.69",
+  "scope": "current Apple Silicon Mac; target Mac not yet tested",
+  "archive_bytes": 731570762,
+  "archive_sha256": "b466bf03419c33cda82da8d64cab59c357d062382af0ea7c376b6ebe882a7e9c",
+  "archive_members": 20375,
+  "portable_home_paths": true,
+  "first_restore": "passed",
+  "second_restore_different_directory": "passed",
+  "original_core_sha256": "afc435d40c37fd856096848a43270400b37641f76e9b91ded390426dba54f0b4",
+  "compute": {
+    "backend": "crossover",
+    "task": "compute",
+    "mode": "demo",
+    "status": "passed",
+    "displacement": -0.000521603,
+    "zones": 27,
+    "cycles": 100,
+    "threads": 2,
+    "total_wall_seconds": 7.032
+  },
+  "gui": "user confirmed: layout, Chinese font, and interaction normal",
+  "cross_device_sync": false,
+  "crossover_engine_embedded": false,
+  "runtime_loaded_modules": "Verified installed CrossOver opengl32.so, winemac.so and this portable bottle core DLL loaded in GUI process"
+}
