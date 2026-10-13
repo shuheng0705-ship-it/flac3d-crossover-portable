@@ -23,5 +23,25 @@
   "gui": "user confirmed: layout, Chinese font, and interaction normal",
   "cross_device_sync": false,
   "crossover_engine_embedded": false,
-  "runtime_loaded_modules": "Verified installed CrossOver opengl32.so, winemac.so and this portable bottle core DLL loaded in GUI process"
+  "runtime_loaded_modules": "Verified installed CrossOver opengl32.so, winemac.so and this portable bottle core DLL loaded in GUI process",
+  "local_app_version": "1.0.1",
+  "retina_guard": "RetinaMode=y and 192 DPI imported before GUI launch",
+  "display_fix_status": "original-format project loads; native high-pixel exports preserve mesh and substantially reduce arc artifacts",
+  "github_latest_published": "v1.0.0",
+  "interactive_artifacts_fully_eliminated": false,
+  "export_test_sizes": [
+    [
+      1200,
+      800
+    ],
+    [
+      4800,
+      3200
+    ]
+  ],
+  "export_preset": [
+    4800,
+    3200
+  ],
+  "forced_graphics_antialiasing": false
 }

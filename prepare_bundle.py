@@ -25,7 +25,7 @@ reg = bottle / 'user.reg'
 text = reg.read_text()
 text = '\n'.join(line for line in text.split('\n') if not line.startswith('"last project"='))
 reg.write_text(text)
-for name in ('launch.sh',):
+for name in ('launch.sh', 'display.reg', 'exporthi.f3dat'):
     shutil.copy2(root / 'source' / name, resources / name)
 (resources / 'launch.sh').chmod(0o755)
 info_path = app / 'Contents/Info.plist'
@@ -34,7 +34,7 @@ for key in list(info):
     if key.endswith('UsageDescription'):
         del info[key]
 info.update(CFBundleIdentifier='local.flac3d.crossover.portable',
-            CFBundleShortVersionString='1.0.0',CFBundleVersion='1',
+            CFBundleShortVersionString='1.0.1',CFBundleVersion='2',
             NSHighResolutionCapable=True)
 info_path.write_bytes(plistlib.dumps(info))
 metadata = {'format':1,'source_crossover':'26.3','source_flac3d':'6.00.69',

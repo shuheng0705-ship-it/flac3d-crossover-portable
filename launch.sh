@@ -74,6 +74,18 @@ if [[ ! -f "$bottle/.flac3d-portable-ready" ]]; then
 fi
 
 [[ -f "$bottle/drive_c/FLAC3D600/exe64/flac3d600_gui.exe" ]]
+mkdir -p "$bottle/drive_c/flac3d-launcher"
+cp "$resources/exporthi.f3dat" "$bottle/drive_c/flac3d-launcher/exporthi.f3dat"
+
+# Keep Retina and DPI explicit on every target Mac; no program-specific DPI override.
+regfile="Z:${resources//\//\\}\\display.reg"
+if ! cxrun "$cx/bin/wine" --bottle "$bottle" --no-gui \
+    --cx-app 'C:\windows\system32\reg.exe' import "$regfile" \
+    > "$logdir/display.log" 2>&1; then
+    print -u2 "高分辨率配置未完成，详细记录：$logdir/display.log。"
+    exit 1
+fi
+
 if [[ "${1:-}" == '--prepare-only' ]]; then
     print -r -- "$bottle"
     exit 0

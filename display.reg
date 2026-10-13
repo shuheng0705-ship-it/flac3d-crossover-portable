@@ -1,0 +1,16 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\Control Panel\Desktop]
+"LogPixels"=dword:000000c0
+
+[HKEY_CURRENT_USER\Software\Wine\Fonts]
+"LogPixels"=dword:000000c0
+
+[HKEY_CURRENT_USER\Software\Wine\Mac Driver]
+"RetinaMode"="y"
+
+[HKEY_CURRENT_USER\Software\itasca\flac3d600\Display]
+"sketch 2"="false"
+
+[HKEY_CURRENT_USER\Software\itasca\flac3d600\PlotPage]
+"print size"="@Size(4800 3200)"

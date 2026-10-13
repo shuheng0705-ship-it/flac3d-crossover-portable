@@ -1,0 +1,2 @@
+; Export the active plot at 4800 x 3200 pixels. No solver commands.
+plot export bitmap filename 'C:/flac3d-launcher/plot-4800.png' size 4800 3200
