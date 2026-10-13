@@ -30,18 +30,12 @@ def _flac_mac_bootstrap():
             current = qtfn(b'?codecForCStrings@QTextCodec@@SAPEAV1@XZ', ctypes.c_void_p, [])
             set_codec = qtfn(b'?setCodecForCStrings@QTextCodec@@SAXPEAV1@@Z', None, [ctypes.c_void_p])
             original_locale = locale()
-            lookup = qtfn(b'?codecForName@QTextCodec@@SAPEAV1@PEBD@Z', ctypes.c_void_p, [ctypes.c_char_p])
-            codec = lookup(b'UTF-8')
+            codec = original_locale
             if not codec:
-                raise RuntimeError('UTF-8 text codec unavailable')
+                raise RuntimeError('System text codec unavailable')
             set_codec(codec)
-            status['qt_cstrings_use_utf8'] = current() == codec
+            status['qt_cstrings_use_system_codec'] = current() == codec
             status['locale_codec_unchanged'] = locale() == original_locale
-            try:
-                import flac_mac_layout
-                status['layout_controller_installed'] = flac_mac_layout.install()
-            except Exception:
-                status['layout_controller_error'] = traceback.format_exc()
     except Exception:
         status['error'] = traceback.format_exc()
     try:
