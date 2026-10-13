@@ -1,47 +1,13 @@
 {
-  "source_crossover": "26.3",
-  "source_flac3d": "6.00.69",
-  "scope": "current Apple Silicon Mac; target Mac not yet tested",
-  "archive_bytes": 731570762,
-  "archive_sha256": "b466bf03419c33cda82da8d64cab59c357d062382af0ea7c376b6ebe882a7e9c",
-  "archive_members": 20375,
-  "portable_home_paths": true,
-  "first_restore": "passed",
-  "second_restore_different_directory": "passed",
-  "original_core_sha256": "afc435d40c37fd856096848a43270400b37641f76e9b91ded390426dba54f0b4",
-  "compute": {
-    "backend": "crossover",
-    "task": "compute",
-    "mode": "demo",
-    "status": "passed",
-    "displacement": -0.000521603,
-    "zones": 27,
-    "cycles": 100,
-    "threads": 2,
-    "total_wall_seconds": 7.032
-  },
-  "gui": "user confirmed: layout, Chinese font, and interaction normal",
-  "cross_device_sync": false,
-  "crossover_engine_embedded": false,
-  "runtime_loaded_modules": "Verified installed CrossOver opengl32.so, winemac.so and this portable bottle core DLL loaded in GUI process",
-  "local_app_version": "1.0.1",
-  "retina_guard": "RetinaMode=y and 192 DPI imported before GUI launch",
-  "display_fix_status": "original-format project loads; native high-pixel exports preserve mesh and substantially reduce arc artifacts",
-  "github_latest_published": "v1.0.0",
-  "interactive_artifacts_fully_eliminated": false,
-  "export_test_sizes": [
-    [
-      1200,
-      800
-    ],
-    [
-      4800,
-      3200
-    ]
-  ],
-  "export_preset": [
-    4800,
-    3200
-  ],
-  "forced_graphics_antialiasing": false
+  "version": "1.0.3",
+  "channel": "preview",
+  "retina_configuration": "192 DPI, Retina, per-monitor awareness and Qt native windows retained",
+  "text_encoding_target": "UTF-8",
+  "current_paper2_encoding": "UTF-8, Chinese comments on disk readable",
+  "current_user_commands_untouched": true,
+  "gui_status": "Chinese comment echo/highlighting and restart layout need verification",
+  "input_fallback_status": "independent Windows Python 2.7 test passed: cp0 input handled as UTF-8 without requiring a codec alias",
+  "core_template": "original MSI DLL and previously verified clean migration archive unchanged",
+  "github_visibility": "private",
+  "model_and_project_files_in_bundle": false
 }

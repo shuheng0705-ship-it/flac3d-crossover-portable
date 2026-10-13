@@ -34,7 +34,7 @@ for key in list(info):
     if key.endswith('UsageDescription'):
         del info[key]
 info.update(CFBundleIdentifier='local.flac3d.crossover.portable',
-            CFBundleShortVersionString='1.0.1',CFBundleVersion='2',
+            CFBundleShortVersionString='1.0.2',CFBundleVersion='3',
             NSHighResolutionCapable=True)
 info_path.write_bytes(plistlib.dumps(info))
 metadata = {'format':1,'source_crossover':'26.3','source_flac3d':'6.00.69',

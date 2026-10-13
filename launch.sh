@@ -76,6 +76,25 @@ fi
 [[ -f "$bottle/drive_c/FLAC3D600/exe64/flac3d600_gui.exe" ]]
 mkdir -p "$bottle/drive_c/flac3d-launcher"
 cp "$resources/exporthi.f3dat" "$bottle/drive_c/flac3d-launcher/exporthi.f3dat"
+# Install the opt-in Python compatibility hook before the embedded interpreter starts.
+compat_target="$bottle/drive_c/FLAC3D600/exe64/python27/Lib/site-packages/sitecustomize.py"
+if [[ -f "$compat_target" ]] && ! /usr/bin/grep -q 'FLAC3D Mac compatibility bootstrap' "$compat_target"; then
+    print -u2 '已有自定义 Python 启动配置，请保留它并手动合并兼容设置。'
+    exit 1
+fi
+cp "$resources/sitecustomize.py" "$compat_target"
+cp "$resources/flac_mac_layout.py" "${compat_target:h}/flac_mac_layout.py"
+# Handle invalid cp0 directly in the legacy input parser, including separate Python shells.
+cp "$resources/ipython-compat/inputsplitter.py" "${compat_target:h}/IPython/core/inputsplitter.py"
+cp "$resources/ipython-compat/encoding.py" "${compat_target:h}/IPython/utils/encoding.py"
+# Migrate the stale application layout once; later user layout changes are preserved.
+if [[ ! -f "$bottle/.flac3d-retina-layout-v1" ]]; then
+    layout_reg="Z:${resources//\//\\}\\startup-layout.reg"
+    cxrun "$cx/bin/wine" --bottle "$bottle" --no-gui \
+        --cx-app 'C:\windows\system32\reg.exe' import "$layout_reg" \
+        > "$logdir/layout.log" 2>&1
+    touch "$bottle/.flac3d-retina-layout-v1"
+fi
 
 # Keep Retina and DPI explicit on every target Mac; no program-specific DPI override.
 regfile="Z:${resources//\//\\}\\display.reg"
@@ -93,6 +112,7 @@ fi
 /usr/bin/nohup /usr/bin/env -i HOME="$HOME" USER="${USER:-$(id -un)}" \
     PATH=/usr/bin:/bin:/usr/sbin:/sbin TMPDIR="${TMPDIR:-/tmp}" \
     LANG=zh_CN.UTF-8 LC_ALL=zh_CN.UTF-8 WINEDEBUG=-all \
+    QT_USE_NATIVE_WINDOWS=1 FLAC3D_MAC_COMPAT=1 \
     "$cx/bin/wine" --bottle "$bottle" --workdir 'C:\FLAC3D600\exe64' \
     --cx-app 'C:\FLAC3D600\exe64\flac3d600_gui.exe' \
     > "$logdir/gui.log" 2>&1 < /dev/null &
