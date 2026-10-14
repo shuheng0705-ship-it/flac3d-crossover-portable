@@ -76,6 +76,11 @@ fi
 [[ -f "$bottle/drive_c/FLAC3D600/exe64/flac3d600_gui.exe" ]]
 mkdir -p "$bottle/drive_c/flac3d-launcher"
 cp "$resources/exporthi.f3dat" "$bottle/drive_c/flac3d-launcher/exporthi.f3dat"
+# Install both CJK font weights before Wine/Qt initializes GUI font caches.
+mkdir -p "$bottle/drive_c/windows/Fonts"
+for font_file in "$resources/fonts/"*.otf(N); do
+    cp "$font_file" "$bottle/drive_c/windows/Fonts/${font_file:t}"
+done
 # Install the opt-in Python compatibility hook before the embedded interpreter starts.
 compat_target="$bottle/drive_c/FLAC3D600/exe64/python27/Lib/site-packages/sitecustomize.py"
 if [[ -f "$compat_target" ]] && ! /usr/bin/grep -q 'FLAC3D Mac compatibility bootstrap' "$compat_target"; then
@@ -84,6 +89,8 @@ if [[ -f "$compat_target" ]] && ! /usr/bin/grep -q 'FLAC3D Mac compatibility boo
 fi
 cp "$resources/sitecustomize.py" "$compat_target"
 cp "$resources/flac_mac_layout.py" "${compat_target:h}/flac_mac_layout.py"
+cp "$resources/flac_editor_render.py" "${compat_target:h}/flac_editor_render.py"
+cp "$resources/flac_gbk_save.py" "${compat_target:h}/flac_gbk_save.py"
 # Handle invalid cp0 directly in the legacy input parser, including separate Python shells.
 cp "$resources/ipython-compat/inputsplitter.py" "${compat_target:h}/IPython/core/inputsplitter.py"
 cp "$resources/ipython-compat/encoding.py" "${compat_target:h}/IPython/utils/encoding.py"
@@ -104,6 +111,11 @@ if ! cxrun "$cx/bin/wine" --bottle "$bottle" --no-gui \
     print -u2 "高分辨率配置未完成，详细记录：$logdir/display.log。"
     exit 1
 fi
+
+font_reg="Z:${resources//\//\\}\\fontfix.reg"
+cxrun "$cx/bin/wine" --bottle "$bottle" --no-gui \
+    --cx-app 'C:\windows\system32\reg.exe' import "$font_reg" \
+    > "$logdir/font.log" 2>&1
 
 if [[ "${1:-}" == '--prepare-only' ]]; then
     print -r -- "$bottle"

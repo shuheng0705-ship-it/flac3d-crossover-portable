@@ -20,6 +20,15 @@ def _flac_mac_bootstrap():
         handle = kernel.GetModuleHandleW(u'QtCore4.dll')
         status['qt_loaded'] = bool(handle)
         status['system_code_page'] = kernel.GetACP()
+        try:
+            awareness = ctypes.c_int(-1)
+            dpi_query = ctypes.windll.shcore.GetProcessDpiAwareness
+            dpi_query.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_int)]
+            dpi_query.restype = ctypes.c_long
+            status['own_process_dpi_query_result'] = dpi_query(None, ctypes.byref(awareness))
+            status['own_process_dpi_awareness'] = awareness.value
+        except Exception:
+            status['own_process_dpi_query_error'] = traceback.format_exc()
         if handle and status['system_code_page'] == 936:
             def qtfn(name, result, args):
                 address = kernel.GetProcAddress(handle, name)
@@ -36,6 +45,17 @@ def _flac_mac_bootstrap():
             set_codec(codec)
             status['qt_cstrings_use_system_codec'] = current() == codec
             status['locale_codec_unchanged'] = locale() == original_locale
+        try:
+            import flac_editor_render
+            status['editor_render_controller_installed'] = flac_editor_render.install()
+        except Exception:
+            status['editor_render_controller_error'] = traceback.format_exc()
+        status['utf8_save_controller_installed'] = False
+        try:
+            import flac_gbk_save
+            status['gbk_save_controller_installed'] = flac_gbk_save.install()
+        except Exception:
+            status['gbk_save_controller_error'] = traceback.format_exc()
     except Exception:
         status['error'] = traceback.format_exc()
     try:

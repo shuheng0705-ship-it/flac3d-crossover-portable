@@ -1,86 +1,63 @@
-# FLAC3D CrossOver 迁移版
+# FLAC3D CrossOver 迁移版 v1.0.4
 
-这是供你在其他 Apple Silicon Mac 上使用的 FLAC3D 6.00.69 启动应用。运行时调用目标电脑安装的 CrossOver，保留当前已调好的容器配置。双击直接进入 FLAC3D 原版 GUI。
+在安装并激活 CrossOver 的 Apple Silicon Mac 上运行 FLAC3D 6.00.69。双击应用直接进入原版 GUI。每台目标电脑需要自己的 CrossOver 和 FLAC3D 授权；未配置 FLAC3D 许可证时，可进入软件提供的演示模式。
 
 ## 在另一台 Mac 上使用
 
-1. 安装并激活 CrossOver。此包的参考版本为 26.3；使用相同版本最便于复现当前环境。Apple Silicon Mac 需要 Rosetta，按 CrossOver 的安装提示完成。
-2. 解压迁移包，把 `FLAC3D CrossOver Portable.app` 放到“应用程序”文件夹。
-3. 双击应用。首次启动会解压并导入容器，需要等待一段时间；之后直接启动 FLAC3D。无需安装 Python 或自行配置 Wine。
-4. 按自己的 FLAC3D 授权进入程序；未配置许可证时可使用软件提供的演示模式。
+1. 安装并激活 CrossOver；本机验证使用 26.3。按 CrossOver 的提示安装 Rosetta。
+2. 解压迁移包，把 `FLAC3D CrossOver Portable.app` 放入“应用程序”。
+3. 双击应用。首次启动自动恢复并注册独立容器，以后直接打开 FLAC3D。
+4. 工程另行复制整个目录，保留工程、data、state 的相对位置。本包没有包含用户的工程和模型，也不会自动同步文件。
 
-应用会自动查找 `/Applications`、用户的 `Applications` 或 Spotlight 中的 CrossOver。每台目标 Mac 都需要安装并激活 CrossOver；包中不包含 CrossOver 程序或其激活信息。
+应用会从系统“应用程序”、用户“应用程序”及 Spotlight 中查找 CrossOver。包中包含 FLAC3D 安装文件、中文字体和兼容设置，未包含 CrossOver 引擎或激活信息。
 
-## 容器和文件
+应用采用本地签名，未经过 Apple 公证。若目标 Mac 首次打开时提示无法验证开发者，在确认来自这个私有仓库并校验下载文件后，可按 [Apple 的打开流程](https://support.apple.com/zh-cn/102445)，到“系统设置 → 隐私与安全性”选择“仍要打开”。
 
-容器名称：`FLAC3D-CrossOver-Portable`。
+## 显示与中文
+
+保留 Retina、192 DPI 和 Qt 原生子窗口。FLAC3D 使用系统 DPI 感知，避免拖大或最大化时出现内容截断和大片留白。编辑器、控制台使用 Noto Sans CJK SC；字体及 SIL OFL 许可证随包提供。
+
+数字蓝色、字符串绿色、注释灰色等原生语法颜色保留。兼容模块修正旧编辑器在一个 UTF-8 中文字符内部切换样式的问题；不改编辑器文字、光标或未保存状态。
+
+旧版 GUI 的文件读取与保存编码路径不一致：UTF-8 中文可能在保存或重新加载后按中文系统编码解释。应用改用 GBK 保存兼容处理，使文件、旧 GUI 和引擎使用一致的 Windows 中文编码。
+
+处理范围为当前已保存工程列出的 `.f3dat`、`.dat`、`.f3edat`，单文件不超过 2 MiB。只有磁盘正文与已保存的 UTF-8 编辑器正文一致、且能无损表示为 GBK 时，才先备份原字节，再转成 GBK。文字、建模命令及数值保持不变。GBK、ASCII、二进制模型、不支持的 Unicode 字符和与编辑器正文不一致的文件不自动转换。
+
+保存通知触发即时检查；定时检查覆盖已打开的已保存文件。原字节备份保存在容器 `drive_c/flac3d-launcher/gbk-save-backups`，文件名为原字节的 SHA-256。新文件需要加入并保存工程，才能进入此处理范围。
+
+已有乱码记录不会追溯重写，应查看修正后重新运行产生的新回显。已经损坏的文字需从原文或备份恢复。请勿再执行旧的 UTF-8 BOM 补标记脚本。
+
+## 容器和软件位置
+
+容器名：`FLAC3D-CrossOver-Portable`。
 
 默认位置：`~/Library/Application Support/CrossOver/Bottles/FLAC3D-CrossOver-Portable`。
 
-软件根目录：容器中的 `drive_c/FLAC3D600`。图形程序位于 `exe64/flac3d600_gui.exe`。
+软件根目录是容器的 `drive_c/FLAC3D600`，图形程序在 `exe64/flac3d600_gui.exe`。首次恢复会把 Documents 等目录绑定到目标 Mac 当前用户。已有同名但未完成初始化的容器会保留并报错，不会覆盖用户目录。
 
-导入时会把 Documents、Downloads 等目录绑定到新电脑当前用户的目录。192 DPI、Retina 和字体配置随容器迁移。已有同名但未完成初始化的容器会保留并报错，不会被覆盖。
+F2 可隐藏右侧控制面板，释放中间区域。没有启用自动面板限宽，不固定主窗口尺寸。
 
-你的工程与模型没有包含在应用包内。迁移工程时请复制整个工程目录，保留工程、data、state 等文件夹的相对位置；仅复制 `.f3prj` 不足以带走关联数据和模型。FLAC3D 6.0 已独立验证可正确读取 GBK 和带 BOM 的 UTF-8 数据文件；无 BOM 的 UTF-8 中文会按错误编码读取。已有文件若已经保存成乱码，需要从原文或备份恢复；调整字体不会自动恢复损坏文字。仍保留 GBK 文件时，请先备份，并按实际显示结果单独处理。
+## 高清图片导出
 
-此包用于本地运行，两个设备之间不会自动同步工程。可另外复制工程目录或使用你已有的文件同步方式。
-
-## v1.0.3 候选已停止发布
-
-图形验证发现全局 UTF-8 字符转换会损坏旧版日期显示，侧面板最大宽度限制会留下大片空白。因此这两项改动已在本地回退，该候选上传已停止，草稿未发布。旧的 v1.0.0 发布保留。
-
-当前使用原中文系统解码与 Retina 配置，保留已通过独立测试的 IPython cp0 输入回退。当前项目数据文件仅添加 UTF-8 BOM，所有原有命令和注释内容保持不变。中文注释高亮和保存后是否保留 BOM，仍需实际界面验证。
-
-### 已撤回候选的原记录
-
-保留 Retina、192 DPI、Qt 原生子窗口和中文字体。新增应用启动时的文本兼容配置，目标是让 UTF-8 数据文件、中文回显和编辑器高亮使用一致的字符转换。
-
-旧 IPython 3.1.0 在无 Windows 控制台时可能把输入编码识别成无效的 `cp0`，导致 Python 脚本未执行就报错。本版在输入解析处直接将该情况回退到 UTF-8，并随启动器部署；不依赖用户每次手动输入修复命令。
-
-自动布局模块按窗口实际宽度限制侧面板，已通过独立 Qt 窗口测试。FLAC3D 的自定义原生窗口在 PySide 中可能被包装成普通 QWidget，因此模块使用 Qt 元数据识别窗口并定位中央内容。真实应用的重启布局与中文注释高亮仍需继续验证，本次作为预览版本提供，不宣称全部问题已解决。
-
-日志还包含 `compat-startup.json`、`layout-runtime.json`，位于容器的 `drive_c/flac3d-launcher`。这些文件用于确认启动兼容配置及面板尺寸。
-
-## v1.0.2 Mac Retina 适配
-
-本地版本增加 FLAC3D 进程级显示器 DPI 适配（仅当前容器中的该程序）和 Qt 原生子窗口，配合 Retina 与 192 DPI。用户已确认本机内屏、外接屏上的字体及模型线条更清晰，菜单、面板、模型窗口布局和操作正常。
-
-这里适配的是 Mac 的 Retina 绘图像素与 2 倍缩放，不会强制把整个应用窗口固定成 3456×2234 或 3840×2160。测试显示 Wine 的 DPI 适配进程能读取内屏 3456×2234 的真实像素；未适配测试进程读取的是 1728×1117 逻辑尺寸。
-
-本版本只在当前 Mac 验证，其他 Mac 仍需检查。用户已再次明确授权上传本次版本；以后仍仅在再次明确要求上传时发布。
-
-## v1.0.1 高清绘图
-
-每次启动显式设置 Retina 和 192 DPI，并把草图模式默认关闭。工程自身保存的全局绘图设置仍可能覆盖启动默认值。
-
-本机原生导出的 1200×800 图片出现弧形纹和断续网格；同一视图的 4800×3200 图片保留网格，线条明显更连续，弧纹大幅减轻。这支持像素采样／摩尔纹解释，不能保证交互窗口在所有缩放比例下完全无纹。
-
-在图形版选中要导出的 Plot 后，可执行以下短命令，得到 4800×3200 的 PNG：
+在图形版选中需要导出的 Plot，然后执行：
 
 ```text
 program call 'C:/flac3d-launcher/exporthi.f3dat'
 ```
 
-图片位于容器的 `drive_c/flac3d-launcher/plot-4800.png`；再次执行会更新该文件。打印及 PDF/SVG 的默认绘图位图尺寸设为 4800×3200；PNG 预设通过上述脚本显式指定像素尺寸。
+4800×3200 的 PNG 保存在容器的 `drive_c/flac3d-launcher/plot-4800.png`，再次执行会更新该图片。密集网格在特定缩放比例下仍可能产生摩尔纹；扩大画布、放大局部或提高导出像素有助于减少纹路。
 
-交互显示时尽量扩大 Plot 画布，局部观察密集网格时适当放大。更高 DPI 无法让每根不足一个像素的线条都清楚显示。未强制开启显卡抗锯齿，因为 FLAC3D 6.0 提示它可能影响对象拾取。
+## 验证范围和诊断
 
-当前工程另有保留网格的 `paper-高清网格-原格式.f3prj`，包含绘图配置调整和草图模式关闭。它只保存在本机原工程目录，未上传用户模型或项目文件。
+本机已验证首次容器恢复、换目录恢复、原安装包核心 DLL 校验和 27 单元小模型求解。用户确认应用重开后中文编辑器、语法颜色、窗口拖大与最大化正常。独立 Qt4/原生 Scintilla 测试验证了中文样式修复、连续保存后 GBK 与 System 解码器的文字一致性，以及 FLAC3D 引擎的中文回显。用户进一步确认：修改 size、保存、运行、关闭并重新打开编辑页后，原有中文注释与新回显均正常。实际 GUI 已记录四次保存兼容处理，文字和 ASCII 命令逐字节校验通过。
 
-旧版工程读取器对序列化格式可能敏感。修改 `.f3prj` 时保留原始空格和分隔符，只替换需要的标量；已确认此方式能加载。当前模型使用的 ±100 裁剪范围不是所有模型的通用默认值。
+其他 Apple Silicon Mac 尚未实机验证，目标电脑的显示效果和许可证需在那里检查。本应用仍调用 CrossOver 的运行引擎，兼容脚本不替代求解器和图形驱动。不会自动上传或更新 GitHub。
 
-## 验证范围
+启动日志在 `~/Library/Logs/FLAC3D-CrossOver-Portable`。容器的 `drive_c/flac3d-launcher` 还有 `compat-startup.json`、`editor-render-runtime.json` 和 `gbk-save-runtime.json`。
 
-此包调用 CrossOver 本身的运行引擎，没有额外的图形转换层。相同 CrossOver 版本、硬件和设置下，启动入口不增加持续计算或渲染环节。
-
-本机已完成首次自动导入、换目录恢复、原安装包核心 DLL 校验和 27 单元小模型求解；用户曾确认 GUI 可以操作、Retina 更清晰；后续仍发现重启时侧面板过宽、部分中文注释回显和高亮异常。上述兼容改动正在处理这些问题，尚未完成全部图形验证。当前只在这台 Mac 上验证；另一台 Mac 的图形表现和许可证可用性需要在目标设备确认。新版本 CrossOver、不同 macOS 和不同显示器可能产生差异。
-
-日志：`~/Library/Logs/FLAC3D-CrossOver-Portable/prepare.log` 和 `gui.log`。
-
-## 依据
+## 参考
 
 - [CodeWeavers：容器归档和恢复](https://support.codeweavers.com/2-common-actions/2-archiving-and-restoring-a-bottle)
-- [CodeWeavers：CrossOver 使用指南与命令行启动](https://www.codeweavers.com/support/docs/crossover-mac/index)
-- [CodeWeavers：PortJump 商业移植方案](https://www.codeweavers.com/portjump/)
-
-如需把 CrossOver 运行环境一起嵌入并向其他用户分发，可评估 PortJump。继续开发开源独立引擎也是一条路线，但目前独立 Wine 与 CrossOver 的界面和兼容性仍存在差异。
+- [Noto CJK 字体](https://github.com/notofonts/noto-cjk/tree/Sans2.004)
+- [Scintilla：保存状态通知与样式接口](https://www.scintilla.org/ScintillaDoc.html)
+- [Microsoft：窗口消息处理](https://learn.microsoft.com/en-us/windows/win32/api/commctrl/nf-commctrl-setwindowsubclass)

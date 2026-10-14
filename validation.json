@@ -1,13 +1,32 @@
 {
-  "version": "1.0.3",
+  "version": "1.0.4",
   "channel": "preview",
-  "retina_configuration": "192 DPI, Retina, per-monitor awareness and Qt native windows retained",
-  "text_encoding_target": "UTF-8",
-  "current_paper2_encoding": "UTF-8, Chinese comments on disk readable",
-  "current_user_commands_untouched": true,
-  "gui_status": "Chinese comment echo/highlighting and restart layout need verification",
-  "input_fallback_status": "independent Windows Python 2.7 test passed: cp0 input handled as UTF-8 without requiring a codec alias",
-  "core_template": "original MSI DLL and previously verified clean migration archive unchanged",
+  "date": "2026-10-14",
+  "reference_crossover": "26.3",
+  "reference_flac3d": "6.00.69",
+  "retina": true,
+  "dpi": 192,
+  "dpi_awareness": "system (own process query: 1)",
+  "qt_native_windows": true,
+  "editor_and_console_font": "Noto Sans CJK SC",
+  "native_syntax_colours_preserved": true,
+  "utf8_character_style_boundaries_repaired": true,
+  "command_save_compatibility": "lossless GBK; exact original-byte backup before conversion",
+  "gui_user_verified": [
+    "App restart loads Chinese render correction",
+    "Syntax colours, Chinese and main-window resizing normal",
+    "Change size, save, run, close/reopen editor: Chinese comments and new console echo normal"
+  ],
+  "actual_gui_save_hook_repairs": 4,
+  "independent_native_tests": [
+    "Scintilla style spans do not split Chinese UTF-8 bytes; text, caret and dirty flag unchanged",
+    "Repeated save hook writes GBK losslessly, System decoder matches exact Unicode text",
+    "Native engine reads GBK fixture and prints Chinese correctly",
+    "GBK, ASCII, model files, unmatched document bodies and unrepresentable Unicode left unchanged"
+  ],
+  "original_core_and_clean_archive_unchanged": true,
+  "project_files_and_models_in_bundle": false,
+  "crossover_engine_in_bundle": false,
   "github_visibility": "private",
-  "model_and_project_files_in_bundle": false
+  "target_device_validation": "current Mac only; other Apple Silicon Macs not yet tested"
 }
